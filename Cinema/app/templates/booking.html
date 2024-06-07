@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Booking Seats - {{ movie.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Выберите место на фильм: {{ movie.title }}</h1>
+    <h2>Доступные места:</h2>
+    <div class="row">
+        <div class="col-10 mx-auto" style="max-height: 500px; overflow-y: auto;">
+            <div class="card border" style="display: inline-block;">
+                <div class="card-body">
+                    <form id="booking-form" action="/movies/{{ movie.id }}/booking" method="post">
+                        {% for row in range(1, 11) %}
+                            <h5 class="card-title">Ряд: {{ row }}</h5>
+                            <div class="btn-group border" role="group">
+                                {% for seat in range(1, 26) %}
+                                    {% set seat_id = (row - 1) * 25 + seat %}
+                                    {% if seat_id in booked_seats %}
+                                        <input type="radio" id="seat{{ seat_id }}" name="seat_number" value="{{ seat_id }}" disabled>
+                                        <label for="seat{{ seat_id }}" class="btn btn-outline-secondary" style="width: 40px; height: 40px; margin: 5px; display: flex; align-items: center; justify-content: center; border: 1px solid black;">{{ seat }}</label>
+                                    {% else %}
+                                        <input type="radio" id="seat{{ seat_id }}" name="seat_number" value="{{ seat_id }}">
+                                        <label for="seat{{ seat_id }}" class="btn btn-outline-primary seat-btn" style="width: 40px; height: 40px; margin: 5px; display: flex; align-items: center; justify-content: center; border: 1px solid black;">{{ seat }}</label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <br>
+                        {% endfor %}
+                        <input type="hidden" name="movie_id" value="{{ movie.id }}">
+                        <input type="hidden" name="user_id" value="{{ current_user.id }}">
+                        <button type="submit" class="btn btn-primary mt-3">Забронировать</button>
+                        <p id="error-message" class="text-danger mt-2" style="display: none;">Пожалуйста, выберите место перед бронированием.</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Обновленный скрипт для обработки выбора места -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+
+        const bookingForm = document.getElementById('booking-form');
+
+        // Добавляем обработчик отправки формы
+        bookingForm.addEventListener('submit', function(event) {
+            // Получаем выбранные места
+            const selectedSeats = document.querySelectorAll('input[name="seat_number"]:checked');
+
+            // Проверяем, есть ли выбранные места
+            if (selectedSeats.length === 0) {
+                // Если нет выбранных мест, отменяем отправку формы
+                event.preventDefault();
+                // Показываем сообщение об ошибке
+                document.getElementById('error-message').style.display = 'block';
+            } else {
+                // Скрываем сообщение об ошибке, если места выбраны
+                document.getElementById('error-message').style.display = 'none';
+            }
+        });
+        // Получаем все кнопки мест
+        const seatButtons = document.querySelectorAll('.seat-btn');
+
+        // Добавляем обработчик клика для каждой кнопки места
+        seatButtons.forEach(function(seatButton) {
+            seatButton.addEventListener('click', function() {
+                // Снимаем выделение со всех кнопок
+                seatButtons.forEach(function(btn) {
+                    btn.classList.remove('active');
+                });
+                // Добавляем выделение на выбранную кнопку
+                this.classList.add('active');
+
+                
+            });
+        });
+    });
+</script>
+{% endblock %}

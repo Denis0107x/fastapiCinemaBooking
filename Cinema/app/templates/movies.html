@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Kinobron{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Фильмотека</h1>
+    <div class="row">
+        <div class="col-md-3 order-md-2">
+            <form id="search-form" class="mb-4">
+                <div class="form-group mb-2">
+                    <label for="title">Название</label>
+                    <input type="text" class="form-control" id="title" name="title" value="{{ request.query_params.get('title', '') }}">
+                </div>
+                <div class="form-group mb-2">
+                    <label for="country">Страна</label>
+                    <input type="text" class="form-control" id="country" name="country" value="{{ request.query_params.get('country', '') }}">
+                </div>
+                <div class="form-group mb-2">
+                    <label for="genre">Жанр</label>
+                    <input type="text" class="form-control" id="genre" name="genre" value="{{ request.query_params.get('genre', '') }}">
+                </div>
+                <div class="form-group mb-2">
+                    <label for="year">Год выпуска</label>
+                    <input type="number" class="form-control" id="year" name="year" value="{{ request.query_params.get('year', '') }}">
+                </div>
+                <div class="form-group mb-2">
+                    <label for="premiere_date">Дата премьеры</label>
+                    <input type="date" class="form-control" id="premiere_date" name="premiere_date" value="{{ request.query_params.get('premiere_date', '') }}">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Поиск</button>
+                <button id="reset-btn" type="button" class="btn btn-secondary w-100 mt-2">Сбросить</button>
+            </form>
+        </div>
+        <div class="col-md-9 order-md-1">
+            <div id="movies-container" class="row row-cols-1 row-cols-md-2 g-4">
+                {% for movie in movies %}
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="{{ movie.poster }}" class="card-img-top" alt="{{ movie.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ movie.title }}</h5>
+                            <p class="card-text">{{ movie.description }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/movies/{{ movie.id }}" class="btn btn-primary">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title text-center mb-4">Регистрация</h1>
+                    <form id="registrationForm" action="/users/" method="POST">
+                        <div class="mb-3">
+                            <label for="inputUsername" class="form-label">Имя пользователя</label>
+                            <input type="text" class="form-control" id="inputUsername" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputEmail" class="form-label">Электронная почта</label>
+                            <input type="email" class="form-control" id="inputEmail" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputPhoneNumber" class="form-label">Номер телефона</label>
+                            <input type="text" class="form-control" id="inputPhoneNumber" name="phone_number" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputPassword" class="form-label">Пароль</label>
+                            <input type="password" class="form-control" id="inputPassword" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputConfirmPassword" class="form-label">Повторите пароль</label>
+                            <input type="password" class="form-control" id="inputConfirmPassword" name="confirm_password" required>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                        </div>
+                    </form>
+                    {% if error %}
+                    <div class="mt-3">
+                        <div id="error-message" class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

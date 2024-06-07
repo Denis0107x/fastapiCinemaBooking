@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Kinobron{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="display-4 mb-4">Добро пожаловать в кинотеатр Kinobron</h1>
+            <p class="lead">Kinobron - это место, где кино оживает. Мы предлагаем вам насладиться просмотром лучших фильмов в уютной атмосфере нашего кинотеатра.</p>
+            <p>У нас вы найдете широкий выбор фильмов различных жанров для всех возрастов и вкусов.</p>
+            <h2>Почему выбирают нас?</h2>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Большой выбор фильмов</li>
+                <li class="list-group-item">Удобное расписание сеансов</li>
+                <li class="list-group-item">Комфортные кинозалы с современным оборудованием</li>
+                <li class="list-group-item">Приветливый персонал</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <img src="/static/1.jpg" class="img-fluid rounded" alt="Кинотеатр Kinobron">
+        </div>
+    </div>
+    <hr class="my-5">
+    <div class="row">
+        <div class="col text-center">
+            <h2 class="mb-4">Расписание сеансов</h2>
+            <p class="lead mb-4">Выберите удобное время для просмотра фильма</p>
+            <!-- Добавьте здесь расписание сеансов, если есть -->
+            <p>Расписание сеансов пока недоступно. Пожалуйста, зайдите позже.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

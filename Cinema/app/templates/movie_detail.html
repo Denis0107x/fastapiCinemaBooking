@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}{{ movie.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">{{ movie.title }}</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{ movie.poster }}" class="img-fluid rounded" alt="{{ movie.title }}">
+        </div>
+        <div class="col-md-8">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <p class="card-text text-dark"><strong>Страна:</strong> {{ movie.country }}</p>
+                    <p class="card-text text-dark"><strong>Жанр:</strong> {{ movie.genre }}</p>
+                    <p class="card-text text-dark"><strong>Режиссер:</strong> {{ movie.director }}</p>
+                    <p class="card-text text-dark"><strong>Год производства:</strong> {{ movie.year }}</p>
+                    <p class="card-text text-dark"><strong>Дата премьеры:</strong> {{ movie.premiere_date }}</p>
+                    <p class="card-text text-dark"><strong>Длительность:</strong> {{ movie.duration }} минут</p>
+                    <p class="card-text text-dark"><strong>Оценка:</strong> 
+                        {% set stars = movie.rating|round|int %}
+                        {% for i in range(1, 11) %}
+                            {% if i <= stars %}
+                                <i class="fas fa-star text-warning"></i>
+                            {% else %}
+                                <i class="far fa-star text-warning"></i>
+                            {% endif %}
+                        {% endfor %}
+                        ({{ movie.rating }})
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col">
+            <h5 class="text-dark">Описание</h5>
+            <p class="mb-1 text-break text-dark">{{ movie.description }}</p>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col">
+            <h5 class="text-dark">Бронирование мест</h5>
+            <p class="text-dark">Выберите место для бронирования:</p>
+            <form action="/movies/{{ movie.id }}/booking" method="get">
+                <button type="submit" class="btn btn-primary">Выбрать место</button>
+            </form>
+        </div>
+        <div class="col">
+            <h5 class="text-dark">Обсуждение фильма</h5>
+            <p class="text-dark">Заходите для обсуждения фильма!</p>
+            <form action="/chat/{{ movie.id }}" target="_blank">
+                <button type="submit" class="btn btn-primary">Открыть чат</button>
+            </form>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col">
+            <h5 class="text-dark">Отзывы</h5>
+            <ul class="list-group mb-4">
+                {% for review in reviews %}
+                    <li class="list-group-item">
+                        <strong>{{ review.user.username }}</strong>
+                        <p class="mb-1 text-break">{{ review.text }}</p>
+                    </li>
+                    {% if not loop.last %}
+                        <hr class="my-4">
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <form action="/movies/{{ movie.id }}/reviews" method="post">
+                <div class="form-group mb-3">
+                    <label for="reviewText">Оставьте свой отзыв:</label>
+                    <textarea class="form-control" id="reviewText" name="text" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

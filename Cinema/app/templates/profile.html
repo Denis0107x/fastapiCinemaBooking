@@ -1,0 +1,50 @@
+<!-- profile.html -->
+{% extends "base.html" %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Профиль</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Имя пользователя: {{ username }}</h5>
+                    <p class="card-text">Электронная почта: {{ email }}</p>
+                    <p class="card-text">Номер телефона: {{ phone_number }}</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Забронированные места</h5>
+                    {% if bookings %}
+                        <ul class="list-group">
+                            {% for booking in bookings %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex flex-column">
+                                        <span>Фильм: {{ booking.movie_title }}</span>
+                                        <span>Ряд: {{ booking.row }}, Место: {{ booking.seat }}</span>
+                                    </div>
+                                    {% if not booking.paid %}
+                                        <span class="badge badge-warning unpaid">Не оплачено</span>
+                                        <form action="/pay/{{ booking.id }}" method="get" class="d-inline-block">
+                                            <button type="submit" class="btn btn-primary btn-pay">Оплатить</button>
+                                        </form>
+                                    {% else %}
+                                        <span class="badge badge-success paid">Оплачено</span>
+
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="card-text">У вас нет забронированных мест.</p>
+                    {% endif %}
+                </div>
+            </div>
+            <p class="mt-4">Наши менеджеры свяжутся с вами для уточнения времени киносеанса.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

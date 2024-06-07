@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Обсуждение - {{ movie.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Обсуждение фильма - {{ movie.title }}</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div id="chatBox" class="border rounded p-3 mb-3 bg-light" style="height: 300px; overflow-y: scroll;" data-movie-id="{{ movie.id }}">
+                {% for message in messages %}
+                    <div>
+                        <strong class="text-primary">{{ message.user.username }}</strong>: {{ message.text }}
+                    </div>
+                {% endfor %}
+            </div>
+            <form id="chatForm" class="input-group mb-3">
+                <input type="text" id="chatInput" class="form-control" placeholder="Введите сообщение">
+                <div class="input-group-append" style="margin-left: 5px;">
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatBox = document.getElementById('chatBox');
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+        const movieId = chatBox.getAttribute('data-movie-id');
+        const accessTokenCookie = document.cookie.split('; ').find(row => row.startsWith('access_token='));
+        const accessToken = accessTokenCookie ? accessTokenCookie.split('=')[1] : null;
+
+        const ws = new WebSocket(`ws://${window.location.host}/ws/movies/${movieId}`);
+
+        ws.onopen = function() {
+            console.log("WebSocket connection opened");
+            ws.send(JSON.stringify({token: accessToken}));
+        };
+
+        ws.onmessage = function(event) {
+            console.log("Message received:", event.data);
+            const data = JSON.parse(event.data);
+            if (data.error) {
+                alert(data.error);
+                ws.close();
+                return;
+            }
+
+            const message = document.createElement('div');
+            if (data.system) {
+                message.innerHTML = `<em class="text-muted">${data.system}</em>`;
+            } else {
+                message.innerHTML = `<strong class="text-primary">${data.username}</strong>: ${data.text}`;
+            }
+            chatBox.appendChild(message);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        };
+
+        ws.onerror = function(event) {
+            console.error("WebSocket error:", event);
+        };
+
+        ws.onclose = function(event) {
+            console.log("WebSocket connection closed:", event);
+        };
+
+        chatForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            if (chatInput.value) {
+                const msg = {
+                    text: chatInput.value
+                };
+                ws.send(JSON.stringify(msg));
+                chatInput.value = '';
+            }
+        });
+    });
+</script>
+{% endblock %}

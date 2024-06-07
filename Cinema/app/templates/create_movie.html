@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Создать фильм{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Создать новый фильм</h1>
+    <form method="post" action="/movies/" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">Название</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Описание</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="poster">Постер</label>
+            <input type="file" class="form-control" id="poster" name="poster" accept="image/*" required>
+        </div>
+        <div class="form-group">
+            <label for="country">Страна</label>
+            <input type="text" class="form-control" id="country" name="country" required>
+        </div>
+        <div class="form-group">
+            <label for="genre">Жанр</label>
+            <input type="text" class="form-control" id="genre" name="genre" required>
+        </div>
+        <div class="form-group">
+            <label for="director">Режиссер</label>
+            <input type="text" class="form-control" id="director" name="director" required>
+        </div>
+        <div class="form-group">
+            <label for="year">Год производства</label>
+            <input type="number" class="form-control" id="year" name="year" required>
+        </div>
+        <div class="form-group">
+            <label for="premiere_date">Дата премьеры</label>
+            <input type="date" class="form-control" id="premiere_date" name="premiere_date" required>
+        </div>
+        <div class="form-group">
+            <label for="duration">Длительность (минут)</label>
+            <input type="number" class="form-control" id="duration" name="duration" required>
+        </div>
+        <div class="form-group">
+            <label for="rating">Оценка</label>
+            <input type="number" step="0.1" class="form-control" id="rating" name="rating" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Создать</button>
+    </form>
+</div>
+{% endblock %}
